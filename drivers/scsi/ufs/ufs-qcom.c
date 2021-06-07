@@ -2159,6 +2159,7 @@ static void ufs_qcom_save_host_ptr(struct ufs_hba *hba)
  * It will read the opcode, idn and buf_length parameters, and, put the
  * response in the buffer field while updating the used size in buf_length.
  */
+#if !defined(CONFIG_UFSFEATURE)
 static int
 ufs_qcom_query_ioctl(struct ufs_hba *hba, u8 lun, void __user *buffer)
 {
@@ -2398,6 +2399,7 @@ ufs_qcom_ioctl(struct scsi_device *dev, unsigned int cmd, void __user *buffer)
 
 	return err;
 }
+#endif
 
 static void ufs_qcom_parse_pm_level(struct ufs_hba *hba)
 {
@@ -2603,6 +2605,7 @@ static int ufs_qcom_init(struct ufs_hba *hba)
 
 	ufs_qcom_init_sysfs(hba);
 
+#if !defined(CONFIG_UFSFEATURE)
 	/* Provide SCSI host ioctl API */
 	hba->host->hostt->ioctl = (int (*)(struct scsi_device *, unsigned int,
 				   void __user *))ufs_qcom_ioctl;
@@ -2610,6 +2613,7 @@ static int ufs_qcom_init(struct ufs_hba *hba)
 	hba->host->hostt->compat_ioctl = (int (*)(struct scsi_device *,
 					  unsigned int,
 					  void __user *))ufs_qcom_ioctl;
+#endif
 #endif
 
 	ufs_qcom_save_host_ptr(hba);

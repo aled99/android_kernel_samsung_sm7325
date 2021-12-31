@@ -1858,7 +1858,9 @@ static int __init thermal_init(void)
 		pr_err("%s: Failed to create thermal logging context\n", __func__);
 #endif
 
+#ifdef CONFIG_DEBUG_FS
 	thermal_debug_init();
+#endif
 
 	return 0;
 
@@ -1887,7 +1889,9 @@ static void thermal_exit(void)
 	destroy_workqueue(thermal_passive_wq);
 	genetlink_exit();
 	class_unregister(&thermal_class);
+#ifdef CONFIG_DEBUG_FS
 	thermal_debug_exit();
+#endif
 	thermal_unregister_governors();
 	ida_destroy(&thermal_tz_ida);
 	ida_destroy(&thermal_cdev_ida);

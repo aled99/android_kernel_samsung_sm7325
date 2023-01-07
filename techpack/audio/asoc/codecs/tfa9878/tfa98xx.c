@@ -905,7 +905,7 @@ static ssize_t tfa98xx_dbgfs_dsp_state_set(struct file *file,
 		pr_info("[0x%x] Manual start of monitor thread...\n",
 			tfa98xx->i2c->addr);
 		tfa98xx_monitor_count = -1;
-		queue_delayed_work(tfa98xx->tfa98xx_wq,
+		queue_delayed_work(system_power_efficient_wq,
 			&tfa98xx->monitor_work, HZ);
 	} else if (!strncmp(buf, mon_stop_cmd,
 		sizeof(mon_stop_cmd) - 1)) {
@@ -3668,7 +3668,7 @@ static void tfa98xx_tapdet_check_update(struct tfa98xx *tfa98xx)
 		/* interrupt not available, setup polling mode */
 		tfa98xx->tapdet_poll = true;
 		if (enable)
-			queue_delayed_work(tfa98xx->tfa98xx_wq,
+			queue_delayed_work(system_power_efficient_wq,
 				&tfa98xx->tapdet_work, HZ / 10);
 		else
 			cancel_delayed_work_sync(&tfa98xx->tapdet_work);
@@ -3998,7 +3998,7 @@ static void tfa98xx_tapdet_work(struct work_struct *work)
 	if (tfa_irq_get(tfa98xx->tfa, tfa9912_irq_sttapdet))
 		tfa98xx_tapdet(tfa98xx);
 
-	queue_delayed_work(tfa98xx->tfa98xx_wq,
+	queue_delayed_work(system_power_efficient_wq,
 		&tfa98xx->tapdet_work, HZ / 10);
 }
 #endif /* (USE_TFA9891) || (USE_TFA9912) */
@@ -4053,7 +4053,7 @@ static void tfa98xx_monitor(struct work_struct *work)
 			tfa98xx->dsp_init = TFA98XX_DSP_INIT_RECOVER;
 			tfa98xx_set_dsp_configured(tfa98xx);
 #if !defined(TFA_USE_DIRECT_API_CALL)
-			queue_delayed_work(tfa98xx->tfa98xx_wq,
+			queue_delayed_work(system_power_efficient_wq,
 				&tfa98xx->init_work, 0);
 #else
 			pr_info("%s: dsp_init (direct) with device %d, profile %d\n",
@@ -4109,7 +4109,7 @@ tfa_monitor_exit:
 			return;
 
 	/* reschedule */
-	queue_delayed_work(tfa98xx->tfa98xx_wq,
+	queue_delayed_work(system_power_efficient_wq,
 		&tfa98xx->monitor_work, 5 * HZ);
 }
 
@@ -4233,7 +4233,7 @@ static void tfa98xx_dsp_init(struct tfa98xx *tfa98xx)
 		/* reschedule this init work for later */
 		list_for_each_entry(ntfa98xx, &tfa98xx_device_list, list) {
 #if !defined(TFA_USE_DIRECT_API_CALL)
-			queue_delayed_work(ntfa98xx->tfa98xx_wq,
+			queue_delayed_work(system_power_efficient_wq,
 				&ntfa98xx->init_work,
 				msecs_to_jiffies(5));
 			ntfa98xx->init_count++;
@@ -4303,7 +4303,7 @@ static void tfa98xx_dsp_init(struct tfa98xx *tfa98xx)
 			 * needed.
 			 */
 			tfa98xx_monitor_count = 0;
-			queue_delayed_work(tfa98xx->tfa98xx_wq,
+			queue_delayed_work(system_power_efficient_wq,
 				&tfa98xx->monitor_work,
 				1 * HZ);
 			mutex_unlock(&tfa98xx->dsp_lock);
@@ -4769,7 +4769,7 @@ static int _tfa98xx_mute(struct tfa98xx *tfa98xx, int mute, int stream)
 		pr_info("%s: start tfa amp\n", __func__);
 #if !defined(TFA_USE_DIRECT_API_CALL)
 		if (tfa98xx->dsp_init != TFA98XX_DSP_INIT_PENDING)
-			queue_delayed_work(tfa98xx->tfa98xx_wq,
+			queue_delayed_work(system_power_efficient_wq,
 				&tfa98xx->init_work, 0);
 #else
 		pr_info("%s: dsp_init (direct) with device %d, profile %d\n",
@@ -4839,11 +4839,6 @@ static int tfa98xx_probe(struct snd_soc_component *component)
 
 	pr_debug("%s:\n", __func__);
 
-	/* setup work queue, will be used to initial DSP on first boot up */
-	tfa98xx->tfa98xx_wq = create_singlethread_workqueue("tfa98xx");
-	if (!tfa98xx->tfa98xx_wq)
-		return -ENOMEM;
-
 #if defined(TFA_WAIT_CAL_IN_WORKQUEUE)
 	tfa98xx->tfa->tfacal_wq = create_singlethread_workqueue("tfacal");
 	if (!tfa98xx->tfa->tfacal_wq)
@@ -4901,8 +4896,8 @@ static void tfa98xx_remove(struct snd_soc_component *component)
 	cancel_delayed_work_sync(&tfa98xx->tapdet_work);
 #endif
 
-	if (tfa98xx->tfa98xx_wq)
-		destroy_workqueue(tfa98xx->tfa98xx_wq);
+	if (system_power_efficient_wq)
+		destroy_workqueue(system_power_efficient_wq);
 
 #if defined(TFA_WAIT_CAL_IN_WORKQUEUE)
 	if (tfa98xx->tfa->tfacal_wq)
@@ -4965,7 +4960,7 @@ static void tfa98xx_irq_tfa2(struct tfa98xx *tfa98xx)
 	 * will be unmasked after handling interrupts in workqueue
 	 */
 	tfa_irq_mask(tfa98xx->tfa);
-	queue_delayed_work(tfa98xx->tfa98xx_wq, &tfa98xx->interrupt_work, 0);
+	queue_delayed_work(system_power_efficient_wq, &tfa98xx->interrupt_work, 0);
 }
 
 

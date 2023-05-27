@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2011-2020 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Permission to use, copy, modify, and/or distribute this software for
  * any purpose with or without fee is hereby granted, provided that the
@@ -662,6 +663,7 @@ struct csr_roam_profile {
 	tCsrKeys Keys;
 	tCsrChannelInfo ChannelInfo;
 	uint32_t op_freq;
+	uint32_t freq_hint;
 	struct ch_params ch_params;
 	/* If this is 0, SME will fill in for caller. */
 	uint16_t beaconInterval;
@@ -717,6 +719,7 @@ struct csr_roam_profile {
 	tSirMacRateSet  extended_rates;
 	struct qdf_mac_addr bssid_hint;
 	bool force_24ghz_in_ht20;
+	bool require_h2e;
 	uint32_t cac_duration_ms;
 	uint32_t dfs_regdomain;
 #ifdef WLAN_FEATURE_FILS_SK
@@ -725,6 +728,7 @@ struct csr_roam_profile {
 	struct wlan_fils_connection_info *fils_con_info;
 #endif
 	bool force_rsne_override;
+	bool is_hs_20_ap;
 };
 
 #ifdef FEATURE_WLAN_MCC_TO_SCC_SWITCH

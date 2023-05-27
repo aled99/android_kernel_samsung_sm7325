@@ -83,15 +83,15 @@ static int qcom_smd_qrtr_probe(struct rpmsg_device *rpdev)
 	rt = of_property_read_bool(rpdev->dev.of_node, "qcom,low-latency");
 
 	size = of_property_count_u32_elems(rpdev->dev.of_node, "qcom,non-wake-svc");
+
 	if (size > 0) {
 		if (size > MAX_NON_WAKE_SVC_LEN)
 			size = MAX_NON_WAKE_SVC_LEN;
 		svc_arr = kmalloc_array(size, sizeof(u32), GFP_KERNEL);
 
 		of_property_read_u32_array(rpdev->dev.of_node, "qcom,non-wake-svc",
-				svc_arr, size);
+					   svc_arr, size);
 	}
-
 	rc = qrtr_endpoint_register(&qdev->ep, net_id, rt, svc_arr);
 
 	if (rc)

@@ -1438,7 +1438,7 @@ int synaptics_ts_probe(struct i2c_client *client, const struct i2c_device_id *id
 
 	input_info(true, &ts->client->dev, "%s: request_irq = %d\n", __func__, client->irq);
 	ret = request_threaded_irq(client->irq, NULL, synaptics_ts_irq_thread,
-			IRQF_TRIGGER_LOW | IRQF_ONESHOT, SYNAPTICS_TS_I2C_NAME, ts);
+			IRQF_TRIGGER_LOW | IRQF_ONESHOT | IRQF_PERF_AFFINE, SYNAPTICS_TS_I2C_NAME, ts);
 	if (ret < 0) {
 		input_err(true, &ts->client->dev, "%s: Unable to request threaded irq\n", __func__);
 		synaptics_ts_release(client);

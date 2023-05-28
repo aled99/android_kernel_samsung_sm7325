@@ -1374,7 +1374,7 @@ int sec_input_parse_dt(struct device *dev)
 	}
 
 	if (of_property_read_u32(np, "sec,irq_flag", &pdata->irq_flag))
-		pdata->irq_flag = IRQF_TRIGGER_LOW | IRQF_ONESHOT;
+		pdata->irq_flag = IRQF_TRIGGER_LOW | IRQF_ONESHOT | IRQF_PERF_AFFINE;
 
 	input_dbg(true, dev, "%s: irq_flag property 0x%X\n", __func__, pdata->irq_flag);
 

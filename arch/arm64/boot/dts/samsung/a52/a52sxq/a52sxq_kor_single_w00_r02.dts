@@ -5350,21 +5350,6 @@
 		};
 	};
 
-	fragment@95 {
-		target = <0xffffffff>;
-
-		__overlay__ {
-			sec,wb-enable;
-			sec,wb-up-threshold-block = <0xc00>;
-			sec,wb-up-threshold-rqs = <0x1e>;
-			sec,wb-down-threshold-block = <0x600>;
-			sec,wb-down-threshold-rqs = <0x19>;
-			sec,wb-disable-threshold-lt = <0x9>;
-			sec,wb-on-delay-ms = <0x5c>;
-			sec,wb-off-delay-ms = <0x1194>;
-		};
-	};
-
 	fragment@96 {
 		target = <0xffffffff>;
 
@@ -7274,7 +7259,7 @@
 		ufsphy_mem = "/fragment@39:target:0";
 		L10C = "/fragment@39/__overlay__:vdda-phy-supply:0";
 		L6B = "/fragment@39/__overlay__:vdda-pll-supply:0";
-		ufshc_mem = "/fragment@40:target:0", "/fragment@95:target:0";
+		ufshc_mem = "/fragment@40:target:0";
 		gcc_ufs_phy_gdsc = "/fragment@40/__overlay__:vdd-hba-supply:0";
 		L7B = "/fragment@40/__overlay__:vcc-supply:0", "/fragment@44/__overlay__:vdd-supply:0";
 		L9B = "/fragment@40/__overlay__:vccq-supply:0", "/fragment@40/__overlay__:qcom,vddp-ref-clk-supply:0";

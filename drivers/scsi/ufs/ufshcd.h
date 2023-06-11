@@ -513,15 +513,14 @@ struct ufs_clk_scaling {
 
 struct ufshcd_cmd_log_entry {
 	char *str;/* context like "send", "complete" */
-	char *cmd_type;/* "scsi", "query", "nop", "uic" */
+	char *cmd_type;/* "scsi", "query", "nop", "dme" */
 	u8 lun;
 	u8 cmd_id;
 	sector_t lba;
 	int transfer_len;
 	u8 idn;/* used only for query idn */
-	u32 intr;
 	u32 doorbell;
-	unsigned long outstanding_reqs;
+	u32 outstanding_reqs;
 	u32 seq_num;
 	unsigned int tag;
 	ktime_t tstamp;
@@ -1027,9 +1026,6 @@ struct ufs_hba {
 	void *crypto_DO_NOT_USE[8];
 #endif /* CONFIG_SCSI_UFS_CRYPTO */
 
-#ifdef CONFIG_SCSI_UFSHCD_QTI
-	struct ufshcd_cmd_log cmd_log;
-#endif
 	bool wb_buf_flush_enabled;
 	bool wb_enabled;
 	struct delayed_work rpm_dev_flush_recheck_work;

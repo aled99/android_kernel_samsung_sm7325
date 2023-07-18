@@ -173,6 +173,28 @@ obj-$(CONFIG_DRM_FBDEV_EMULATION) += msm_fbdev.o
 
 msm_drm-$(CONFIG_DISPLAY_SAMSUNG) += samsung/PBA_BOOTING/ss_dsi_panel_PBA_BOOTING_fhd.o
 
+msm_drm-$(CONFIG_PANEL_HX83121_PPC357DB11_WQXGA) += samsung/HX83121_PPC357DB11/ss_dsi_panel_HX83121_PPC357DB11.o
+
+
+msm_drm-$(CONFIG_PANEL_HX83102_TV104WUM_WUXGA) += samsung/BLIC/ss_blic_lp8558_i2c.o
+
+msm_drm-$(CONFIG_PANEL_HX83121_PPC357DB11_WQXGA) += samsung/BLIC/ss_blic_lp8558_i2c.o
+
+msm_drm-$(CONFIG_PANEL_NT36672C_TL066FVMC02_FHD) += samsung/BLIC/ss_blic_ktz8864b_i2c.o
+
+msm_drm-$(CONFIG_PANEL_XCP2_NT36672C_PM6585JB2_FHD) += samsung/BLIC/ss_blic_ktz8864b_i2c.o
+
+msm_drm-$(CONFIG_PANEL_NT36672C_PM6585JB3_FHD) += samsung/BLIC/ss_blic_s2dps01a01_i2c.o
+
+msm_drm-$(CONFIG_PANEL_HX83121_PPC357DB11_WQXGA) += samsung/PMIC/ss_boost_max77816_i2c.o
+msm_drm-$(CONFIG_PANEL_HX83121_PPC357DB11_WQXGA) += samsung/PMIC/ss_buck_isl98609_i2c.o
+msm_drm-$(CONFIG_PANEL_TAP2_HX8279_TV101WUM_WUXGA) += samsung/PMIC/ss_buck_isl98609_i2c.o
+msm_drm-$(CONFIG_PANEL_GTACT4PRO_HX8279_TV101WUM_WUXGA) += samsung/PMIC/ss_buck_isl98609_i2c.o
+
+
+msm_drm-$(CONFIG_PANEL_FT8203_TS124QDM_WQXGA) += samsung/FT8203_TS124QDM/ss_dsi_panel_FT8203_TS124QDM.o
+
+
 msm_drm-$(CONFIG_PANEL_S6E3FC3_AMS646YD01_LO_FHD) += samsung/S6E3FC3_AMS646YD01_LO/ss_dsi_panel_S6E3FC3_AMS646YD01_LO.o
 
 msm_drm-$(CONFIG_PANEL_SW83109_BF067XMM_FHD) += samsung/SW83109_BF067XMM/ss_dsi_panel_SW83109_BF067XMM.o
